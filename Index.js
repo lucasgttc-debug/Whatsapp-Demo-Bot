@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 const app = express();
 app.use(bodyParser.json());
 
-const VERIFY_TOKEN "lucasbot25";
+const VERIFY_TOKEN = "lucasbot25";
 
 app.get("/webhook", (req, res) => {
   const mode = req.query["hub.mode"];
