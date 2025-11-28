@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const VERIFY_TOKEN = "lucasbot25";
-const ACCESS_TOKEN = "EAAhkFIOiHCwBQFbZAmkC4tU8KsyrZAfl9IIREjZCvV1JnUa9ZBQ4gaYWSfW5MrmOaL0n7KWgcw8A53cjHbyjm3qetwhVfijNhZAZCRaoNxIPopcrW93QwZAo2wzdTWJneZBZAeGrtPdqZA0QGlGZAh8dsL3iJuY0uL5DAEp04TAdpbDNighEbb5firxR9pZAYYtB9epRoTungXrgunyWjO8zsdSQH5QKrvHPoCyf9sJwRj7F5eyT6nlSfAZDZD";
+const ACCESS_TOKEN = "EAAhkFIOiHCwBQIQozOExuCALqChrYc7txAV2bA16vPMfkwiRNeZAnERbyWDgZBimkcqgIGtqfRMCqfg64PIG1g8yHZBZAtL0vGeATzZBTOsw6ple2K2IMFaktGTjlobz8qDGdukuPjAhTYZAFGfr5FV9FrOHtEt4HkIse5PlwkGIEomgdPgpf4iXiIkk3x0fBAol0qxmjlV8CmytmlHCbESuBzvzZCTdMW4ViHdCmYy4FcGnwC3eQZDZD";
 const PHONE_NUMBER_ID = "860037433865539";
 
 app.get("/webhook", (req, res) => {
