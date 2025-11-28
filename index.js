@@ -5,9 +5,8 @@ import fetch from "node-fetch";
 const app = express();
 app.use(bodyParser.json());
 
-// ⬇️ REEMPLAZAR ESTOS VALORES
 const VERIFY_TOKEN = "lucasbot25";
-const ACCESS_TOKEN = "EAAhkFIOiHCwBQLPQ5vDu9C7qbWrl4dbvN6w0Ry5o5b0GjdAvV5dWxfn17wz684QCP5RiccquzLPK7fpCZAbBD03hZCWPDLzfS4Ts7d3E3xZCZC2k3csRo7rePb4UZC2izHB5ZBYZBZBj030HBlSNILwJd7umRiJbnDknEU8cdq0xvmlBDVGidchfUw40Mp5dlsNq0tz7HCnhcZClwfL09EMuw8TqBqj5ZAIX44QMd35rcLzMyMmFeSfAZDZD";
+const ACCESS_TOKEN = "EAAhkFIOiHCwBQB8EeTE4zUfZA9DHZCpE3G5gbXLV9cX52WORBcMgnt85me3nT6Y1zih9AQA7xvlMEASC5f47MyebvE6lMvk0bLVu9RipresUAt2ApwobbTLO74fKyjSc9hz0MH4X33O76vjnKvupZBHuS4nynSzhj0NmtZB9qx8UgnzAvgu16EJ3G5vZCpwiNBqbQXA06Xri6nxZCfpyZB7ckUECFPLSS6C4uxA8t9wdPNZBZCpuQ0QZDZD";
 const PHONE_NUMBER_ID = "860037433865539";
 
 app.get("/webhook", (req, res) => {
@@ -23,34 +22,32 @@ app.get("/webhook", (req, res) => {
 });
 
 app.post("/webhook", async (req, res) => {
-  try {
-    const entry =
-      req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+  console.log("WEBHOOK BODY COMPLETO:");
+  console.log(JSON.stringify(req.body, null, 2));
 
-    if (entry && entry.type === "text") {
-      const from = entry.from;
-      const message = entry.text.body;
+  const entry = req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
 
-      console.log("Mensaje recibido:", message);
+  if (entry && entry.type === "text") {
+    const from = entry.from;
+    const message = entry.text.body;
 
-      await fetch(
-        `https://graph.facebook.com/v18.0/${PHONE_NUMBER_ID}/messages`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${ACCESS_TOKEN}`,
-          },
-          body: JSON.stringify({
-            messaging_product: "whatsapp",
-            to: from,
-            text: { body: "Mensaje recibido: " + message }
-          })
-        }
-      );
-    }
-  } catch (err) {
-    console.log("ERROR:", err);
+    console.log("Mensaje recibido:", message);
+
+    await fetch(
+      `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          to: from,
+          text: { body: "Mensaje recibido: " + message }
+        }),
+      }
+    );
   }
 
   res.sendStatus(200);
