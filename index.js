@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const VERIFY_TOKEN = "lucasbot25";
-const ACCESS_TOKEN = "EAAhkFIOiHCwBQB8EeTE4zUfZA9DHZCpE3G5gbXLV9cX52WORBcMgnt85me3nT6Y1zih9AQA7xvlMEASC5f47MyebvE6lMvk0bLVu9RipresUAt2ApwobbTLO74fKyjSc9hz0MH4X33O76vjnKvupZBHuS4nynSzhj0NmtZB9qx8UgnzAvgu16EJ3G5vZCpwiNBqbQXA06Xri6nxZCfpyZB7ckUECFPLSS6C4uxA8t9wdPNZBZCpuQ0QZDZD";
+const ACCESS_TOKEN = "EAAhkFIOiHCwBQFbZAmkC4tU8KsyrZAfl9IIREjZCvV1JnUa9ZBQ4gaYWSfW5MrmOaL0n7KWgcw8A53cjHbyjm3qetwhVfijNhZAZCRaoNxIPopcrW93QwZAo2wzdTWJneZBZAeGrtPdqZA0QGlGZAh8dsL3iJuY0uL5DAEp04TAdpbDNighEbb5firxR9pZAYYtB9epRoTungXrgunyWjO8zsdSQH5QKrvHPoCyf9sJwRj7F5eyT6nlSfAZDZD";
 const PHONE_NUMBER_ID = "860037433865539";
 
 app.get("/webhook", (req, res) => {
@@ -25,29 +25,38 @@ app.post("/webhook", async (req, res) => {
   console.log("WEBHOOK BODY COMPLETO:");
   console.log(JSON.stringify(req.body, null, 2));
 
-  const entry = req.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+  try {
+    const entry = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
 
-  if (entry && entry.type === "text") {
-    const from = entry.from;
-    const message = entry.text.body;
+    if (entry && entry.type === "text") {
+      const from = entry.from;
+      const message = entry.text.body;
 
-    console.log("Mensaje recibido:", message);
+      console.log("Mensaje recibido:", message);
 
-    await fetch(
-      `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${ACCESS_TOKEN}`,
-        },
-        body: JSON.stringify({
-          messaging_product: "whatsapp",
-          to: from,
-          text: { body: "Mensaje recibido: " + message }
-        }),
-      }
-    );
+      const response = await fetch(
+        `https://graph.facebook.com/v20.0/${PHONE_NUMBER_ID}/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${ACCESS_TOKEN}`,
+          },
+          body: JSON.stringify({
+            messaging_product: "whatsapp",
+            to: from,
+            text: {
+              body: "Mensaje recibido: " + message,
+            },
+          }),
+        }
+      );
+
+      const data = await response.json();
+      console.log("RESPUESTA DE META:", data);
+    }
+  } catch (err) {
+    console.log("ERROR:", err);
   }
 
   res.sendStatus(200);
